@@ -25,7 +25,7 @@ class ChatFrame(tk.Frame):
         self.inner_frame.bind("<Configure>", self._on_frame_configure)
         self.canvas.bind("<Configure>", self._on_canvas_resize)
 
-        # ✅ 鼠标滚轮兼容性绑定（跨平台）
+        # 鼠标滚轮支持
         system = platform.system()
         if system in ("Windows", "Darwin"):
             self.canvas.bind_all("<MouseWheel>", self._on_mousewheel)
@@ -63,19 +63,21 @@ class ChatFrame(tk.Frame):
         self.scroll_to_bottom()
 
     def stream_append(self, text_chunk):
-        self.stream_text += text_chunk
-        if any(p in self.stream_text for p in "。！？\n") or len(self.stream_text) > 30:
-            debug_print("流式完成一段气泡：", self.stream_text.strip())
-            self.stream_label.config(text=self.stream_text.strip())
+        if self.stream_label is None:
             self.stream_label = self.bubble_mgr.start_stream_bubble(self.stream_role)
-            self.stream_text = ""
-            self.scroll_to_bottom()
+
+        self.stream_text += text_chunk
+        self.stream_label.config(text=self.stream_text)
+        self.stream_label.update_idletasks()
+        self.scroll_to_bottom()
 
     def finalize_stream_reply(self):
         if self.stream_label:
-            content = self.stream_label.cget("text")
-            if not content.strip():
+            if not self.stream_label.cget("text").strip() and self.stream_text.strip():
+                self.stream_label.config(text=self.stream_text.strip())
+            elif not self.stream_text.strip():
                 debug_print("移除空气泡")
                 self.stream_label.destroy()
+
             self.stream_label = None
             self.scroll_to_bottom()
