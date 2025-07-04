@@ -1,0 +1,15 @@
+{
+  "current_scene": "intro",
+  "affection": 8,
+  "triggered": [],
+  "is_finished": false,
+  "emotion": "\u7d27\u5f20",
+  "status": "\u907f\u8ba9",
+  "tone_history": [
+    "neutral",
+    "compliment",
+    "neutral",
+    "neutral",
+    "neutral"
+  ]
+}

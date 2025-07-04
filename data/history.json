@@ -1,0 +1,54 @@
+[
+  {
+    "role": "system",
+    "content": "\u65c1\u767d\uff1a\u4f60\u5728\u6821\u56ed\u91cc\u7b2c\u4e00\u6b21\u9047\u5230\u5979..."
+  },
+  {
+    "role": "user",
+    "content": "\u4f60\u597d\u5440\u540c\u5b66"
+  },
+  {
+    "role": "assistant",
+    "content": "\u55ef\u3002"
+  },
+  {
+    "role": "user",
+    "content": "\u540c\u5b66\u4f60\u6709\u70b9\u5bb3\u7f9e\u5440"
+  },
+  {
+    "role": "assistant",
+    "content": "\u6ca1\u6709\u3002\uff08\u4f4e\u5934\u7ffb\u4e66\uff09"
+  },
+  {
+    "role": "user",
+    "content": "\u540c\u5b66\u4f60\u597d\u6f02\u4eae"
+  },
+  {
+    "role": "assistant",
+    "content": "\u2026\u2026\uff08\u522b\u5f00\u89c6\u7ebf\uff09"
+  },
+  {
+    "role": "user",
+    "content": "\u540c\u5b66\uff1f"
+  },
+  {
+    "role": "assistant",
+    "content": "\u2026\u2026\uff08\u52a0\u5feb\u811a\u6b65\uff09"
+  },
+  {
+    "role": "user",
+    "content": "\u600e\u4e48\u4e0d\u8bf4\u8bdd\u540c\u5b66"
+  },
+  {
+    "role": "assistant",
+    "content": "\u4e0d\u60f3\u8bf4\u3002\uff08\u4f4e\u5934\u5feb\u8d70\uff09"
+  },
+  {
+    "role": "user",
+    "content": "\u6211\u64cd\u4e86\uff0c\u4f60\u7279\u4e48\u7ed9\u8138\u4e0d\u8981\u8138"
+  },
+  {
+    "role": "assistant",
+    "content": "\u2026\u2026\uff08\u8f6c\u8eab\u8dd1\u5f00\uff09"
+  }
+]
