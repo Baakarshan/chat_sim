@@ -21,30 +21,30 @@ def load_state(GameStateClass):
             data = json.loads(content)
             obj = GameStateClass()
             obj.current_scene = data.get("current_scene", "intro")
-            obj.affection = data.get("affection", 0)
+            obj.favor = data.get("favor", 0)
             obj.triggered = set(data.get("triggered", []))
             obj.is_finished = data.get("is_finished", False)
-            obj.emotion = data.get("emotion", "neutral")
+            obj.emotion = data.get("emotion", "平静")
             obj.status = data.get("status", "放空")
-            obj.tone_history = data.get("tone_history", [])
-            debug_print("成功加载游戏状态")
             return obj
     except Exception as e:
-        debug_print("加载游戏状态失败：", repr(e))
+        debug_print("加载状态失败，错误信息：", e)
         return GameStateClass()
 
-def save_state(game_state):
+def save_state(state_obj):
+    """保存状态到文件"""
     try:
         with open(STATE_PATH, 'w') as f:
-            json.dump(game_state.to_dict(), f, indent=2)
-        debug_print("游戏状态已保存")
+            json.dump(state_obj.to_dict(), f, ensure_ascii=False, indent=2)
+        debug_print("状态保存成功")
     except Exception as e:
-        debug_print("保存状态失败：", repr(e))
+        debug_print("保存状态失败：", e)
 
 def reset_state_file():
-    if os.path.exists(STATE_PATH):
-        try:
-            os.remove(STATE_PATH)
-            debug_print("游戏状态文件已清除")
-        except Exception as e:
-            debug_print("清除状态文件失败：", repr(e))
+    """清空状态文件"""
+    try:
+        with open(STATE_PATH, 'w') as f:
+            f.write("")
+        debug_print("状态文件已重置为空")
+    except Exception as e:
+        debug_print("重置状态文件失败：", e)

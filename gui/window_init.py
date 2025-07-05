@@ -38,15 +38,14 @@ def start_intro_if_needed(ctrl, chat_frame, history):
         ctrl.push_system(preset)
         return
 
-    debug_print("重新打开，有历史 → 异步注入 AI 场景提示")
-
-    def generate_async():
-        desc = generate_scene_intro(
+    debug_print("历史存在，异步生成 intro 场景提示")
+    def generate():
+        intro = generate_scene_intro(
             current_scene=ctrl.state.current_scene,
             emotion=ctrl.state.emotion,
             status=ctrl.state.status,
             history=history
         )
-        chat_frame.after(0, lambda: ctrl.push_system(desc))
+        ctrl.push_system(intro)
 
-    threading.Thread(target=generate_async, daemon=True).start()
+    threading.Thread(target=generate, daemon=True).start()

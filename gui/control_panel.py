@@ -11,7 +11,7 @@ def build_control_panel(window):
     frame.pack(fill=tk.X)
 
     aff_label = tk.Label(frame, text="好感度: 0", width=12, anchor="w")
-    emo_label = tk.Label(frame, text="情绪: neutral", width=14, anchor="w")
+    emo_label = tk.Label(frame, text="情绪: 平静", width=14, anchor="w")
     stat_label = tk.Label(frame, text="状态: 放空", width=14, anchor="w")
 
     restart_btn = tk.Button(frame, text="重新开始", command=window.on_restart)

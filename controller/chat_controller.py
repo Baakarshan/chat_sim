@@ -5,7 +5,6 @@ from model.history import load_history, save_history
 from model.game_state import GameState
 from model.scene import get_prompt
 from model.scene_generator import generate_scene_intro
-from model.emotion_analyzer import analyze_user_input
 from controller.stream_handler import handle_stream_response
 from utils.debug_tools import debug_print
 
@@ -16,6 +15,7 @@ class ChatController:
         self.history = load_history()
         self._first_prompt_shown = False
 
+        # 初始化场景提示
         if auto_intro:
             if self.history:
                 debug_print("加载已有历史，生成旁白")
@@ -34,21 +34,17 @@ class ChatController:
             self._first_prompt_shown = True
 
     def push_system(self, text):
+        """添加系统气泡到聊天框"""
         self.chat_frame.after(0, lambda: self.chat_frame.add_message("system", text))
         self.history.append({"role": "system", "content": text})
 
     def on_user_input(self, text):
+        """处理用户输入，记录并触发 AI 回复"""
         debug_print("玩家输入：", text)
         self.chat_frame.after(0, lambda: self.chat_frame.add_message("user", text))
         self.history.append({"role": "user", "content": text})
 
-        # 情绪分析（用于判断好感增量 + 语气记录）
-        delta, tag = analyze_user_input(text)
-        debug_print(f"语气分析结果：tag={tag}, affection变化={delta}")
-        self.state.increase_affection(delta)
-        self.state.add_tone_tag(tag)
-
-        # 启动异步 AI 回复线程
+        # 启动异步 AI 回复线程（AI 会决定情绪、状态、好感度变化）
         threading.Thread(
             target=handle_stream_response,
             args=(self.chat_frame, self.state, self.history),

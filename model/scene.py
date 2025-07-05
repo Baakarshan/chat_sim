@@ -1,19 +1,42 @@
 # model/scene.py
 
 from config import SCENES
-from model.chatbot_api import generate_scene_description
-from utils.debug_tools import debug_print
+from model.scene_generator import generate_scene_intro
 
-def get_prompt(scene_name):
-    """获取该场景的旁白文本，如未缓存则通过AI生成"""
-    scene = SCENES.get(scene_name)
-    if not scene:
-        debug_print(f"未找到场景定义：{scene_name} → 返回默认旁白")
-        return "（你正站在一个不知名的校园角落。）"
+def get_prompt(scene_id: str) -> str:
+    """
+    获取指定场景的固定 preset 旁白（若存在）
+    """
+    scene = SCENES.get(scene_id)
+    if scene and scene.get("preset"):
+        return scene["preset"]
+    return ""
 
-    if scene.get("autogen"):
-        debug_print(f"场景 {scene_name} 设置为自动生成旁白，调用 AI")
-        return generate_scene_description(scene_name)
+def is_autogen(scene_id: str) -> bool:
+    """
+    判断该场景是否允许自动生成旁白
+    """
+    scene = SCENES.get(scene_id)
+    return scene.get("autogen", False)
 
-    debug_print(f"场景 {scene_name} 使用预设旁白")
-    return scene.get("preset", f"（你来到了 {scene_name}。）")
+def get_trigger_threshold(scene_id: str) -> int:
+    """
+    获取该场景的好感触发阈值
+    """
+    scene = SCENES.get(scene_id)
+    return scene.get("trigger", 0)
+
+def get_next_scene(scene_id: str) -> str:
+    """
+    获取该场景的下一步（默认取第一个）
+    """
+    scene = SCENES.get(scene_id)
+    next_list = scene.get("next", [])
+    return next_list[0] if next_list else ""
+
+def should_enter_scene(current_scene, favor) -> bool:
+    """
+    判断是否触发进入下一个场景
+    """
+    threshold = get_trigger_threshold(current_scene)
+    return favor >= threshold

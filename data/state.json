@@ -1,13 +1,8 @@
 {
   "current_scene": "intro",
-  "affection": 7,
+  "favor": 0,
   "triggered": [],
   "is_finished": false,
-  "emotion": "\u51b7\u6f20",
-  "status": "\u907f\u8ba9",
-  "tone_history": [
-    "neutral",
-    "compliment",
-    "compliment"
-  ]
+  "emotion": "Æ½¾²",
+  "status": "·Å¿Õ"
 }

@@ -7,6 +7,7 @@ from utils.debug_tools import debug_print
 import threading
 import queue
 import time
+import json
 
 client = OpenAI(
     api_key=API_KEY,
@@ -33,59 +34,53 @@ def chat_stream(messages):
                 delta = chunk.choices[0].delta
                 if hasattr(delta, "content") and delta.content:
                     result_queue.put(delta.content)
-            debug_print("模型返回结束标志（finish_reason=stop）")
             finished.set()
         except Exception as e:
-            debug_print("模型请求出错：", repr(e))
+            debug_print("模型流异常：", e)
             finished.set()
 
-    thread = threading.Thread(target=run_stream, daemon=True)
-    thread.start()
+    threading.Thread(target=run_stream, daemon=True).start()
 
-    timeout = 12
+    full_reply = ""
     start_time = time.time()
-    yielded = False
 
     while not finished.is_set() or not result_queue.empty():
         try:
-            chunk = result_queue.get(timeout=0.1)
-            yielded = True
-            yield chunk
+            piece = result_queue.get(timeout=1)
+            full_reply += piece
         except queue.Empty:
-            if not yielded and time.time() - start_time > timeout:
-                debug_print("模型响应超时，触发 fallback ...")
-                yield get_default_reply()
+            if time.time() - start_time > 15:
+                debug_print("等待模型超时，使用 fallback")
                 break
+
+    # 尝试解析结构化 JSON（reply/emotion/status/favor）
+    try:
+        response = json.loads(full_reply)
+        if all(k in response for k in ("reply", "emotion", "status", "favor")):
+            return response
+    except Exception as e:
+        debug_print("结构化解析失败，fallback 使用默认")
+
+    return {
+        "reply": full_reply.strip() or get_default_reply(),
+        "emotion": "平静",
+        "status": "放空",
+        "favor": 0
+    }
 
 def chat_once(messages):
     """
-    非流式对话：返回完整回复（用于情绪判断、状态识别、旁白生成）
+    单次调用模型（非流式），用于生成场景提示、摘要等
+    返回纯文本（不结构化）
     """
     try:
-        if len(messages) > 15:
-            messages = messages[:1] + messages[-14:]
-
+        debug_print("调用 chat_once 获取单句文本")
         response = client.chat.completions.create(
             model=ENDPOINT_ID,
             messages=messages,
+            stream=False,
         )
         return response.choices[0].message.content.strip()
     except Exception as e:
-        debug_print("chat_once 请求出错，使用默认回复。错误：", repr(e))
+        debug_print("chat_once 调用失败：", e)
         return get_default_reply()
-
-def generate_scene_description(scene_name):
-    """辅助调用：生成校园场景的时间、地点、天气旁白"""
-    messages = [{"role": "user", "content": build_scene_prompt(scene_name)}]
-    try:
-        debug_print(f"请求生成场景旁白：{scene_name}")
-        response = client.chat.completions.create(
-            model=ENDPOINT_ID,
-            messages=messages,
-        )
-        content = response.choices[0].message.content.strip()
-        debug_print("旁白生成成功：", content)
-        return content
-    except Exception as e:
-        debug_print("旁白生成失败，使用默认旁白。错误：", repr(e))
-        return "（清晨，教学楼外，阳光微弱）"

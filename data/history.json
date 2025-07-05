@@ -1,30 +1,62 @@
 [
   {
     "role": "system",
-    "content": "\u65c1\u767d\uff1a\u4f60\u5728\u6821\u56ed\u91cc\u7b2c\u4e00\u6b21\u9047\u5230\u5979..."
+    "content": "旁白：你在校园里第一次遇到她..."
   },
   {
     "role": "user",
-    "content": "ilove u"
+    "content": "你好呀同学"
   },
   {
     "role": "assistant",
-    "content": "\uff08\u76b1\u7709\uff09\u65e0\u804a\u3002"
+    "content": "（正低头整理怀里的笔记本，听到声音时指尖一顿，抬头时鬓角碎发滑落耳后，手里的书脊轻轻磕了下小臂）啊，你好呀。（眼角弯起来，指腹无意识摩挲着书封——是本《小王子》）我刚从图书馆出来，你这是要进去吗？"
   },
   {
     "role": "user",
-    "content": "\u4f60\u597d\u6f02\u4eae"
+    "content": "1"
   },
   {
     "role": "assistant",
-    "content": "\uff08\u4f4e\u5934\u8d70\u5f00\uff09\u54e6\u3002"
+    "content": "……（她没回应你，好像有点冷淡）"
   },
   {
     "role": "user",
-    "content": "\u4f60\u597d\u53ef\u7231"
+    "content": "怎么不说话"
   },
   {
     "role": "assistant",
-    "content": "\uff08\u8f6c\u8eab\u6446\u624b\uff09\u522b\u8ddf\u7740\u4e86\u3002"
+    "content": "……（她没回应你，好像有点冷淡）"
+  },
+  {
+    "role": "system",
+    "content": "她放空着，被你问得睫毛轻颤，声音平静。"
+  },
+  {
+    "role": "user",
+    "content": "同学你好漂亮"
+  },
+  {
+    "role": "assistant",
+    "content": "（指尖猛地攥紧书脊，指节泛白半秒又松开，耳尖悄悄漫上粉意，视线垂到笔记本的烫金标题上）……谢谢。（声音比刚才低了些，像含着片薄雪，轻轻化在风里）你、你也是去借书吗？"
+  },
+  {
+    "role": "user",
+    "content": "hello"
+  },
+  {
+    "role": "assistant",
+    "content": "……（她没回应你，好像有点冷淡）"
+  },
+  {
+    "role": "system",
+    "content": "开场时她正放空，平静抬眼回应你的hello。"
+  },
+  {
+    "role": "user",
+    "content": "我们去看书吧，你改变一下状态"
+  },
+  {
+    "role": "assistant",
+    "content": "（睫毛又颤了颤，这次像是被“一起看书”四个字轻轻勾住，指尖无意识地把《小王子》往怀里拢了拢，书页边角蹭过锁骨）……好啊。（声音比刚才清晰了些，像雪化后露出的青草地，低低的）图书馆三楼靠窗的位置……有阳光，你不介意吧？（抬眼看你时，眼里还沾着点没散尽的放空，却慢慢洇开点浅淡的笑意）"
   }
 ]
