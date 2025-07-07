@@ -9,7 +9,7 @@ from model.history import save_history
 from utils.debug_tools import debug_print
 from controller.stream_utils import split_reply_into_blocks, safe_append_text
 
-def handle_stream_response(chat_frame, state, history):
+def handle_stream_response(chat_frame, state, history, update_status_callback=None):
     # 构建上下文消息（含系统提示）
     emotion_prompt = {"role": "system", "content": f"当前情绪：{state.emotion}，状态：{state.status}"}
     messages = [emotion_prompt] + history
@@ -65,4 +65,7 @@ def handle_stream_response(chat_frame, state, history):
     # 保存历史与状态
     save_history(history)
     state.save()
-    chat_frame.after(0, chat_frame.master.update_status)
+
+    # ✅ 显式调用 UI 更新函数
+    if update_status_callback:
+        chat_frame.after(0, update_status_callback)

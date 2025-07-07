@@ -6,8 +6,8 @@ from gui.chat_frame import ChatFrame
 from gui.input_frame import InputFrame
 from gui.control_panel import build_control_panel
 from gui.window_init import load_history_if_any, start_intro_if_needed
-from utils.debug_tools import debug_print
 from model.history import reset_history
+from utils.debug_tools import debug_print
 import sys
 import os
 
@@ -24,12 +24,14 @@ class Window(tk.Tk):
         self.input_frame = InputFrame(self, self.on_send)
         self.input_frame.pack(fill=tk.X)
 
-        self.ctrl = ChatController(self.chat_frame, auto_intro=False)
+        # ✅ 显式传入 UI 刷新函数
+        self.ctrl = ChatController(self.chat_frame, update_status_callback=self.update_status)
 
         self.control_panel = build_control_panel(self)
 
         self.history = load_history_if_any(self.ctrl, self.chat_frame)
         self.after(100, lambda: start_intro_if_needed(self.ctrl, self.chat_frame, self.history))
+        self.update_status()
 
     def on_send(self, text):
         """处理发送按钮事件"""
@@ -38,13 +40,13 @@ class Window(tk.Tk):
     def update_status(self):
         """同步状态栏显示：好感度、情绪、状态"""
         state = self.ctrl.state
-        aff = state.favor
-        self.control_panel["aff"].config(text=f"好感度: {aff}")
+        self.control_panel["aff"].config(text=f"好感度: {state.favor}")
         self.control_panel["emo"].config(text=f"情绪: {state.emotion}")
         self.control_panel["stat"].config(text=f"状态: {state.status}")
+        debug_print("已更新状态栏：", state.favor, state.emotion, state.status)
 
     def on_restart(self):
-        """重启游戏：清除状态与历史记录，然后重启进程"""
+        """重启游戏（保留当前窗口）"""
         reset_history()
         self.ctrl.state.reset()
         python = sys.executable

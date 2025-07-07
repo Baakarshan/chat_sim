@@ -2,7 +2,7 @@
 
 from openai import OpenAI
 from config import API_KEY, ENDPOINT_ID, BASE_URL
-from model.chat_fallback import get_default_reply, build_scene_prompt
+from model.chat_fallback import get_default_reply
 from utils.debug_tools import debug_print
 import threading
 import queue
@@ -15,13 +15,25 @@ client = OpenAI(
 )
 
 def chat_stream(messages):
-    """主对话流式生成函数：逐块返回模型输出；如超时自动fallback"""
+    """主对话流式生成函数：逐块返回模型输出；如超时自动 fallback"""
     result_queue = queue.Queue()
     finished = threading.Event()
 
-    if len(messages) > 20:
-        debug_print("历史消息过多，仅保留最近 20 条")
-        messages = messages[:1] + messages[-19:]
+    # 添加结构化提示 system prompt（确保总是开头）
+    system_instruction = {
+        "role": "system",
+        "content": (
+            "你是校园恋爱模拟器中的女主角，接下来你将扮演女主角，回复玩家说的话。"
+            "请你以以下格式回复一个合法 JSON 对象，内容必须包含以下字段：\n"
+            "- reply：你想说的话，1~3 句短句即可，建议加括号动作（如“（轻笑）真的吗？”）\n"
+            "- emotion：当前情绪，必须是以下之一：开心、生气、冷漠、害羞、惊讶、难过、平静\n"
+            "- status：当前状态，必须是以下之一：放空、思考、期待、紧张、学习\n"
+            "- favor：整数，表示你对玩家的好感度变化（例如 2，-1）\n"
+            "⚠️ 你必须只输出 JSON 对象，不加任何注释、解释或自然语言。"
+        )
+    }
+
+    messages = [system_instruction] + messages[-20:]  # 限制长度
 
     def run_stream():
         try:
@@ -69,10 +81,7 @@ def chat_stream(messages):
     }
 
 def chat_once(messages):
-    """
-    单次调用模型（非流式），用于生成场景提示、摘要等
-    返回纯文本（不结构化）
-    """
+    """单轮调用，用于生成场景 intro 提示"""
     try:
         debug_print("调用 chat_once 获取单句文本")
         response = client.chat.completions.create(

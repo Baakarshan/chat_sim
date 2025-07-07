@@ -12,7 +12,7 @@ def load_state(GameStateClass):
         return GameStateClass()
 
     try:
-        with open(STATE_PATH, 'r') as f:
+        with open(STATE_PATH, 'r', encoding='utf-8-sig') as f:  # ✅ 修改这里
             content = f.read().strip()
             if not content:
                 debug_print("状态文件为空，使用初始状态")
@@ -31,10 +31,11 @@ def load_state(GameStateClass):
         debug_print("加载状态失败，错误信息：", e)
         return GameStateClass()
 
+
 def save_state(state_obj):
     """保存状态到文件"""
     try:
-        with open(STATE_PATH, 'w') as f:
+        with open(STATE_PATH, 'w', encoding='utf-8-sig') as f:
             json.dump(state_obj.to_dict(), f, ensure_ascii=False, indent=2)
         debug_print("状态保存成功")
     except Exception as e:
@@ -43,7 +44,7 @@ def save_state(state_obj):
 def reset_state_file():
     """清空状态文件"""
     try:
-        with open(STATE_PATH, 'w') as f:
+        with open(STATE_PATH, 'w', encoding='utf-8') as f:
             f.write("")
         debug_print("状态文件已重置为空")
     except Exception as e:

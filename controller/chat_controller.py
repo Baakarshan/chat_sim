@@ -3,35 +3,18 @@
 import threading
 from model.history import load_history, save_history
 from model.game_state import GameState
-from model.scene import get_prompt
-from model.scene_generator import generate_scene_intro
 from controller.stream_handler import handle_stream_response
 from utils.debug_tools import debug_print
 
 class ChatController:
-    def __init__(self, chat_frame, auto_intro=True):
+    def __init__(self, chat_frame, update_status_callback=None, auto_intro=True):
         self.chat_frame = chat_frame
+        self.update_status_callback = update_status_callback
         self.state = GameState.load()
         self.history = load_history()
         self._first_prompt_shown = False
 
-        # 初始化场景提示
-        if auto_intro:
-            if self.history:
-                debug_print("加载已有历史，生成旁白")
-                prompt = generate_scene_intro(
-                    current_scene=self.state.current_scene,
-                    emotion=self.state.emotion,
-                    status=self.state.status,
-                    history=self.history
-                )
-            else:
-                debug_print("首次启动，使用 preset 旁白")
-                prompt = get_prompt(self.state.current_scene)
-
-            debug_print("初始场景提示：", prompt)
-            self.push_system(prompt)
-            self._first_prompt_shown = True
+        # ✅ 删除自动生成旁白的逻辑，让 window_init 控制 intro 显示
 
     def push_system(self, text):
         """添加系统气泡到聊天框"""
@@ -44,9 +27,9 @@ class ChatController:
         self.chat_frame.after(0, lambda: self.chat_frame.add_message("user", text))
         self.history.append({"role": "user", "content": text})
 
-        # 启动异步 AI 回复线程（AI 会决定情绪、状态、好感度变化）
+        # 启动异步 AI 回复线程，传入 UI 刷新回调
         threading.Thread(
             target=handle_stream_response,
-            args=(self.chat_frame, self.state, self.history),
+            args=(self.chat_frame, self.state, self.history, self.update_status_callback),
             daemon=True
         ).start()
