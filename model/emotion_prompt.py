@@ -1,11 +1,20 @@
 # model/emotion_prompt.py
+# coding: utf-8
+"""
+情绪驱动系统提示词生成模块。
+遵循 Google Python 风格指南，增加详细中文注释。
+"""
 
-from utils.debug_tools import debug_print
+from utils.debug_tools import debug_print  # 导入调试打印
 
 def build_emotion_prompt(emotion: str) -> str:
     """
-    根据情绪生成系统提示词，引导 AI 语气/内容风格
-    输入为中文情绪（两字），如："开心", "冷漠"
+    根据情绪生成系统提示词，引导 AI 语气/内容风格。
+    输入为中文情绪（两字），如："开心", "冷漠"。
+    Args:
+        emotion: 当前情绪。
+    Returns:
+        str: 系统提示词。
     """
     debug_print("生成情绪驱动系统 prompt，当前情绪：", emotion)
 
@@ -25,5 +34,5 @@ def build_emotion_prompt(emotion: str) -> str:
         "难过": "你现在有些伤感，说话语气低落、缓慢，可以透露些情绪。",
     }
 
-    tone = styles.get(emotion, "")
+    tone = styles.get(emotion, "")  # 获取情绪风格描述
     return base_intro + (tone if tone else "")

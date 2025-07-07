@@ -5,58 +5,30 @@
   },
   {
     "role": "user",
-    "content": "我骂你，给我掉好感度"
-  },
-  {
-    "role": "assistant",
-    "content": "（皱眉后退一步）你...你怎么突然说这种话？"
-  },
-  {
-    "role": "system",
-    "content": "你话音刚落，她气鼓鼓攥紧拳头，脸颊通红。"
-  },
-  {
-    "role": "user",
-    "content": "哟，生气的样子还挺可爱"
-  },
-  {
-    "role": "assistant",
-    "content": "（跺了跺脚，瞪着你）你...你不许胡说！"
-  },
-  {
-    "role": "user",
     "content": "啦啦啦"
   },
   {
     "role": "assistant",
-    "content": "（脸颊更红，别过头）哼，幼稚！"
+    "content": "（抬起头）咦？你是在哼歌吗？"
   },
   {
     "role": "user",
-    "content": "啦啦啦"
+    "content": "哇塞，你好美女！"
+  },
+  {
+    "role": "assistant",
+    "content": "（脸颊微红）啊…谢谢…（眼神有些闪躲）"
   },
   {
     "role": "system",
-    "content": "你哼着“啦啦啦”走近，她气红了脸，手紧张地绞着衣角。"
-  },
-  {
-    "role": "assistant",
-    "content": "（双手抱胸）你到底烦不烦啊！"
+    "content": "她脸颊微红，手指绞着衣角，小声“啊”了一声。"
   },
   {
     "role": "user",
-    "content": "你好漂亮"
+    "content": "怎么啦同学"
   },
   {
     "role": "assistant",
-    "content": "……（她没回应你，好像有点冷淡）"
-  },
-  {
-    "role": "user",
-    "content": "你好漂亮"
-  },
-  {
-    "role": "assistant",
-    "content": "（脸颊泛起红晕，别过脸）别...别再说了..."
+    "content": "没、没什么…（低下头）就是突然被搭话有点…（声音变小）"
   }
 ]

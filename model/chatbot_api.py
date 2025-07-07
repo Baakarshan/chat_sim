@@ -1,23 +1,34 @@
 # model/chatbot_api.py
+# coding: utf-8
+"""
+大模型 API 封装模块。
+遵循 Google Python 风格指南，增加详细中文注释。
+"""
 
-from openai import OpenAI
-from config import API_KEY, ENDPOINT_ID, BASE_URL
-from model.chat_fallback import get_default_reply
-from utils.debug_tools import debug_print
-import threading
-import queue
-import time
-import json
+from openai import OpenAI  # 导入 OpenAI SDK
+from config import API_KEY, ENDPOINT_ID, BASE_URL  # 导入 API 配置
+from model.chat_fallback import get_default_reply  # 导入默认回复
+from utils.debug_tools import debug_print  # 导入调试打印
+import threading  # 导入线程库
+import queue  # 导入队列库
+import time  # 导入时间库
+import json  # 导入 JSON 序列化
 
 client = OpenAI(
     api_key=API_KEY,
     base_url=BASE_URL,
 )
 
-def chat_stream(messages):
-    """主对话流式生成函数：逐块返回模型输出；如超时自动 fallback"""
-    result_queue = queue.Queue()
-    finished = threading.Event()
+def chat_stream(messages: list) -> dict:
+    """
+    主对话流式生成函数：逐块返回模型输出；如超时自动 fallback。
+    Args:
+        messages: 聊天上下文消息列表。
+    Returns:
+        dict: 结构化回复（reply, emotion, status, favor）。
+    """
+    result_queue = queue.Queue()  # 结果队列
+    finished = threading.Event()  # 完成事件
 
     # 添加结构化提示 system prompt（确保总是开头）
     system_instruction = {
@@ -28,7 +39,7 @@ def chat_stream(messages):
             "- reply：你想说的话，1~3 句短句即可，建议加括号动作（如“（轻笑）真的吗？”）\n"
             "- emotion：当前情绪，必须是以下之一：开心、生气、冷漠、害羞、惊讶、难过、平静\n"
             "- status：当前状态，必须是以下之一：放空、思考、期待、紧张、学习\n"
-            "- favor：整数，表示你对玩家的好感度变化（例如 2，-1）\n"
+            "- favor：整数，表示你对玩���的好感度变化（例如 2，-1）\n"
             "⚠️ 你必须只输出 JSON 对象，不加任何注释、解释或自然语言。"
         )
     }
@@ -80,8 +91,14 @@ def chat_stream(messages):
         "favor": 0
     }
 
-def chat_once(messages):
-    """单轮调用，用于生成场景 intro 提示"""
+def chat_once(messages: list) -> str:
+    """
+    单轮调用，用于生成场景 intro 提示。
+    Args:
+        messages: 聊天上下文消息列表。
+    Returns:
+        str: 单句文本回复。
+    """
     try:
         debug_print("调用 chat_once 获取单句文本")
         response = client.chat.completions.create(

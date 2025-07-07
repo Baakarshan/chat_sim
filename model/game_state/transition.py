@@ -1,12 +1,21 @@
 # model/game_state/transition.py
+# coding: utf-8
+"""
+场景跳转逻辑模块。
+遵循 Google Python 风格指南，增加详细中文注释。
+"""
 
-from model.scene import get_trigger_threshold, get_next_scene, is_autogen
-from model.scene_generator import generate_scene_intro
-from utils.debug_tools import debug_print
+from model.scene import get_trigger_threshold, get_next_scene, is_autogen  # 导入场景相关方法
+from model.scene_generator import generate_scene_intro  # 导入场景 intro 生成
+from utils.debug_tools import debug_print  # 导入��试打印
 
-def check_scene_transition(state):
+def check_scene_transition(state) -> None:
     """
-    判断当前好感度是否满足场景跳转条件，如满足则切换场景并添加旁白
+    判断当前好感度是否满足场景跳转条件，如满足则切换场景并添加旁白。
+    Args:
+        state: 游戏状态对象。
+    Returns:
+        None
     """
     current = state.current_scene
     trigger = get_trigger_threshold(current)
