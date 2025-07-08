@@ -11,6 +11,40 @@ ChatSim 是一个基于 Python 的校园恋爱模拟器，通过 AI 大语言模
 - 📜 场景式旁白生成
 - 🎮 图形界面交互（基于 tkinter）
 
+## 🔐 API Key 使用说明
+
+本项目默认使用开发者本人的 OpenAI API Key，为了保障安全和隐私，**请在使用前删除或替换为你自己的 API Key。**
+
+你可以在以下位置配置你自己的 Key：
+
+* 打开项目中的 `config.py` 文件
+* 找到如下字段（可能类似）：
+
+```python
+OPENAI_API_KEY = "sk-..."
+BASE_URL = "https://api.openai.com/v1"  # 如使用代理服务，请替换为代理地址
+```
+
+* 将 `"sk-..."` 替换为你自己的 OpenAI API 密钥（[点击获取](https://platform.openai.com/account/api-keys)）
+
+⚠️ **强烈建议不要将含有你个人 API Key 的 `config.py` 上传至任何公共平台或版本库中！**
+
+为方便管理，你也可以将 API Key 保存在本地环境变量中，再在代码中读取，例如：
+
+```python
+import os
+
+OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
+```
+
+然后在命令行运行前设置变量：
+
+```bash
+export OPENAI_API_KEY=sk-...         # macOS / Linux
+set OPENAI_API_KEY=sk-...            # Windows CMD
+$env:OPENAI_API_KEY="sk-..."         # Windows PowerShell
+```
+
 ## 📦 安装方式
 
 1. 克隆本项目：
